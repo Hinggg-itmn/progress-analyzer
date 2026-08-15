@@ -1,3 +1,13 @@
+mod parser;
+mod stats;
+mod report;
+
 fn main() {
-    println!("Hello, world!");
+    let entries = parser::parse_readme("README.md");
+
+    for entry in &entries {
+        println!("{entry:?}");
+    }
+
+    println!("Total: {}", entries.len());
 }
