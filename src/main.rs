@@ -3,7 +3,7 @@ mod stats;
 mod report;
 
 fn main() {
-    let entries = parser::parse_readme("README.md");
+    let entries = parser::parse_readme("test1.md");
 
     for entry in &entries {
         println!("{entry:?}");
