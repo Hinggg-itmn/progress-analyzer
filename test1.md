@@ -50,7 +50,7 @@ Chạy `cargo test` cho đúng bài đó trước, nếu pass mới thêm dòng 
 | 7 | 2026-08-08 | Products Of Array | arrays_hashing | Medium | Prefix | O(n)/O(n) |
 | 6 | 2026-08-04 | Encode AndDecode String | arrays_hashing | Medium | Chunked | Transfer |
 | - | 2026-08-03 | [Top K Frequent Elements (Update Approach)](notes/top_k_frequent_elements.md) | arrays_hashing | Medium | Bucket Sort approach | O(n)/O(n) |
-| 5 | 2026-08-02 | Top K Frequency Elements | top-k-frequent-elements | Medium | BinaryHeap | O(n)/O(n) |
+| 5 | 2026-08-02 | Top K Frequency Elements | arrays_hashing | Medium | BinaryHeap | O(n)/O(n) |
 | 4 | 2026-07-30 | Group_Anagrams | arrays_hashing | Medium | Sorting | O(n)/O(nlogn) |
 | - | 2026-07-28 | [Valid Anagram (Update Approach)](notes/valid_anagram.md) | arrays_hashing | Easy | Frequency Array | O(n)/O(1) |
 | 1 | 2026-07-26 | Two Sum | arrays_hashing | Easy | HashMap | O(n)/O(n) |

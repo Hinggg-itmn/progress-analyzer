@@ -10,6 +10,24 @@ pub struct Entry {
     pub complexity: String,
 }
 
+/// Danh sách category hợp lệ đã biết — dùng để phát hiện dòng bị lệch cột.
+/// Cập nhật danh sách này khi bạn thêm category mới (vd two_pointers, sliding_window...).
+const KNOWN_CATEGORIES: &[&str] = &[
+    "arrays_hashing",
+    "two_pointers",
+    "sliding_window",
+    "stack",
+    "binary_search",
+    "linked_list",
+    "trees",
+    "heap_priority_queue",
+    "backtracking",
+    "graphs",
+    "dynamic_programming",
+];
+
+const VALID_DIFFICULTIES: &[&str] = &["Easy", "Medium", "Hard"];
+
 pub fn parse_readme(path: &str) -> Vec<Entry> {
     let content = fs::read_to_string(path)
         .expect("Failed to read README.md");
@@ -17,7 +35,7 @@ pub fn parse_readme(path: &str) -> Vec<Entry> {
     let mut entries = Vec::new();
     let mut inside_rows = false;
 
-    for line in content.lines() {
+    for (line_num, line) in content.lines().enumerate() {
         if line.contains("<!-- ROWS -->") {
             inside_rows = true;
             continue;
@@ -54,6 +72,28 @@ pub fn parse_readme(path: &str) -> Vec<Entry> {
             complexity: columns[7].to_string(),
         };
 
+        // Validate: cảnh báo nếu dữ liệu có dấu hiệu bị lệch cột (do gõ tay sai)
+        // Dòng số hiển thị ở đây là số dòng trong file .md, giúp dễ tìm lại để sửa.
+        if !KNOWN_CATEGORIES.contains(&entry.category.as_str()) {
+            eprintln!(
+                "⚠️  Dòng {}: category '{}' không nằm trong danh sách đã biết — \
+                nghi ngờ bị lệch cột (Category <-> Cách giải)? Entry: '{}'",
+                line_num + 1,
+                entry.category,
+                entry.name,
+            );
+        }
+
+        if !VALID_DIFFICULTIES.contains(&entry.difficulty.as_str()) {
+            eprintln!(
+                "⚠️  Dòng {}: độ khó '{}' không hợp lệ (phải là Easy/Medium/Hard) — \
+                nghi ngờ lệch cột. Entry: '{}'",
+                line_num + 1,
+                entry.difficulty,
+                entry.name,
+            );
+        }
+
         entries.push(entry);
     }
 
@@ -61,7 +101,16 @@ pub fn parse_readme(path: &str) -> Vec<Entry> {
 }
 
 fn clean_name(name: &str) -> String {
-    name.replace(" (Update Approach)", "")
-        .replace("[", "")
-        .replace("]", "")
+    // Cắt cú pháp markdown link [text](url) -> chỉ giữ "text"
+    let base = if let Some(start) = name.find('[') {
+        if let Some(end) = name.find(']') {
+            &name[start + 1..end]
+        } else {
+            name
+        }
+    } else {
+        name
+    };
+
+    base.replace(" (Update Approach)", "")
 }
